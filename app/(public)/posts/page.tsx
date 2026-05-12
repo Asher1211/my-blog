@@ -60,13 +60,7 @@ export default async function PostsPage({
           文章 {activeTag && <span className="text-lg">· #{activeTag}</span>}
           {activeCategory && <span className="text-lg">· {categories.find(c => c.slug === activeCategory)?.name || activeCategory}</span>}
         </h1>
-        <PageSizeSelect
-          value={limit}
-          options={[5, 10, 15, 30]}
-          onChange={(v) => {
-            window.location.href = baseHref({ limit: String(v), tag: activeTag, category: activeCategory });
-          }}
-        />
+        <PageSizeSelect options={[5, 10, 15, 30]} />
       </div>
 
       {/* Filter chips */}
