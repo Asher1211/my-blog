@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils/date";
 import ScrollProgress from "@/components/common/ScrollProgress";
 import TableOfContents from "@/components/common/TableOfContents";
 import GiscusComments from "@/components/common/GiscusComments";
+import ShareButton from "@/components/common/ShareButton";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -96,10 +97,11 @@ export default async function PostDetailPage({ params }: Props) {
                 style={{ color: "var(--text-primary)" }}>
                 {post.title}
               </h1>
-              <div className="flex gap-4 text-sm" style={{ color: "var(--text-muted)" }}>
+              <div className="flex gap-4 text-sm items-center flex-wrap" style={{ color: "var(--text-muted)" }}>
                 <span>{formatDate(post.publishedAt ?? post.createdAt)}</span>
                 <span>{post.wordCount} 字</span>
                 <span>约 {post.readingTime} 分钟</span>
+                <ShareButton />
               </div>
             </header>
 
