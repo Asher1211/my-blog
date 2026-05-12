@@ -23,7 +23,7 @@ export default function PetSprite({ animation, size = 64, facingLeft = false }: 
 
   // Preload ALL sprite images once
   useEffect(() => {
-    const urls = [...new Set(Object.values(SPRITE_MAP).map((s) => s.src))];
+    const urls = Object.values(SPRITE_MAP).map((s) => s.src).filter((v, i, a) => a.indexOf(v) === i);
     let cancelled = false;
 
     Promise.all(
