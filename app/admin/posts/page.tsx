@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminPostsPage({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: { page?: string; limit?: string };
 }) {
   const page = Math.max(1, Number(searchParams.page) || 1);
   const limit = Math.min(50, Math.max(5, Number(searchParams.limit) || 15));
