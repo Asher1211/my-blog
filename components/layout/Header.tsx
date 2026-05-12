@@ -55,6 +55,13 @@ export default function Header() {
               <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
             </svg>
           </Link>
+          <Link href="/login" aria-label="后台登录"
+            className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-[var(--bg-elevated)]"
+            style={{ color: "var(--text-muted)" }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
+            </svg>
+          </Link>
           <ThemeToggle />
 
           {/* Mobile hamburger */}
