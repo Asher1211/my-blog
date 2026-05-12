@@ -39,7 +39,7 @@ export default function ParticleBackground() {
         y: Math.random() * canvas!.height,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3 - 0.15,
-        r: Math.random() * 1.5 + 0.5,
+        r: Math.random() * 2 + 0.8,
         opacity: Math.random() * 0.5,
         life: 0,
         maxLife: 200 + Math.random() * 300,
@@ -47,7 +47,7 @@ export default function ParticleBackground() {
     }
 
     // Initial particles
-    const maxParticles = 80;
+    const maxParticles = 100;
     for (let i = 0; i < maxParticles; i++) {
       const p = spawnParticle();
       p.life = Math.random() * p.maxLife; // stagger initial positions
@@ -60,11 +60,10 @@ export default function ParticleBackground() {
       ctx!.clearRect(0, 0, w, h);
 
       const isLight = document.documentElement.classList.contains("light");
-      const color = isLight ? "55, 40, 30" : "212, 168, 84";
-      // Boost visibility in light mode
-      const particleBaseAlpha = isLight ? 1.2 : 0.5;
-      const lineBaseAlpha = isLight ? 0.2 : 0.06;
-      const lineDist = isLight ? 150 : 120;
+      const color = isLight ? "100, 70, 40" : "212, 168, 84";
+      const particleBaseAlpha = isLight ? 1.5 : 0.5;
+      const lineBaseAlpha = isLight ? 0.25 : 0.06;
+      const lineDist = isLight ? 160 : 120;
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
