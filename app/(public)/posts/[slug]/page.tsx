@@ -104,6 +104,7 @@ export default async function PostDetailPage({ params }: Props) {
                 <span>{formatDate(post.publishedAt ?? post.createdAt)}</span>
                 <span>{post.wordCount} 字</span>
                 <span>约 {post.readingTime} 分钟</span>
+                <span>{post.views} 次阅读</span>
                 <ShareButton />
               </div>
             </header>

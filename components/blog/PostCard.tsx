@@ -50,6 +50,7 @@ export default function PostCard({ post, index = 0 }: Props) {
             </span>
           )}
           <span>{post.readingTime} 分钟阅读</span>
+          {post.views > 0 && <span>{post.views} 次阅读</span>}
         </div>
 
         {/* Title */}
