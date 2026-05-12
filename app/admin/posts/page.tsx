@@ -36,6 +36,7 @@ export default async function AdminPostsPage() {
               <th className="text-left p-3" style={{ color: "var(--text-muted)" }}>标题</th>
               <th className="text-left p-3 hidden sm:table-cell" style={{ color: "var(--text-muted)" }}>状态</th>
               <th className="text-left p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>分类</th>
+              <th className="text-left p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>阅读</th>
               <th className="text-left p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>字数</th>
               <th className="text-left p-3 hidden lg:table-cell" style={{ color: "var(--text-muted)" }}>日期</th>
               <th className="text-right p-3" style={{ color: "var(--text-muted)" }}>操作</th>
@@ -66,6 +67,9 @@ export default async function AdminPostsPage() {
                   </td>
                   <td className="p-3 hidden md:table-cell" style={{ color: "var(--text-secondary)" }}>
                     {post.category?.name || "-"}
+                  </td>
+                  <td className="p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>
+                    {post.views}
                   </td>
                   <td className="p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>
                     {post.wordCount}
