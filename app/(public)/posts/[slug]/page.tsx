@@ -6,6 +6,7 @@ import { processMarkdown } from "@/lib/markdown/processor";
 import { formatDate } from "@/lib/utils/date";
 import ScrollProgress from "@/components/common/ScrollProgress";
 import TableOfContents from "@/components/common/TableOfContents";
+import GiscusComments from "@/components/common/GiscusComments";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -140,6 +141,9 @@ export default async function PostDetailPage({ params }: Props) {
                 ) : <span className="text-xs" style={{ color: "var(--text-muted)" }}>已是最后一篇</span>}
               </div>
             </nav>
+
+            {/* Comments */}
+            <GiscusComments />
           </article>
 
           {/* Right sidebar: TOC */}
