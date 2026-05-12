@@ -108,12 +108,13 @@ export default function DeskPet() {
     try { localStorage.setItem(POS_KEY, JSON.stringify(posRef.current)); } catch { /* ignore */ }
   }, []);
 
-  // Click → chat
+  // Click → chat (if enabled)
+  const chatEnabled = process.env.NEXT_PUBLIC_ENABLE_PET_CHAT !== "false";
   const onClick = useCallback(() => {
-    if (dragDist.current > 8) return;
+    if (!chatEnabled || dragDist.current > 8) return;
     setChatOpen(true);
     setBubble("");
-  }, []);
+  }, [chatEnabled]);
 
   // Send chat
   async function send(e: React.FormEvent) {
@@ -192,7 +193,7 @@ export default function DeskPet() {
       </div>
 
       {/* Chat panel */}
-      {chatOpen && (
+      {chatEnabled && chatOpen && (
         <div
           className="fixed rounded-xl flex flex-col shadow-2xl animate-fade-in-up"
           style={{ left: "max(30px, 2vw)", right: "max(30px, 2vw)", bottom: 30, maxWidth: 360, maxHeight: "70vh", zIndex: 99999,
