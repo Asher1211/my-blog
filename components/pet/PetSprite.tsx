@@ -1,14 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type PetAnimation = "idle" | "walk" | "chat";
 
-interface SpriteConfig {
-  src: string;
-  frames: number;
-  fps: number;
-}
+interface SpriteConfig { src: string; frames: number; fps: number; }
 
 const SPRITE_MAP: Record<PetAnimation, SpriteConfig> = {
   idle: { src: "/pet/idle.png", frames: 22, fps: 12 },
@@ -16,27 +12,42 @@ const SPRITE_MAP: Record<PetAnimation, SpriteConfig> = {
   chat: { src: "/pet/chat.png", frames: 9, fps: 9 },
 };
 
-interface Props {
-  animation: PetAnimation;
-  size?: number;
-  facingLeft?: boolean;
-}
+interface Props { animation: PetAnimation; size?: number; facingLeft?: boolean; }
 
 export default function PetSprite({ animation, size = 64, facingLeft = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef(0);
   const timerRef = useRef(0);
-  const spriteImg = useRef<HTMLImageElement | null>(null);
+  const imagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const [loaded, setLoaded] = useState(false);
 
-  // Load sprite sheet for current animation
+  // Preload ALL sprite images once
   useEffect(() => {
-    const config = SPRITE_MAP[animation];
-    if (!config) return;
+    const urls = [...new Set(Object.values(SPRITE_MAP).map((s) => s.src))];
+    let cancelled = false;
 
-    const img = new Image();
-    img.onload = () => { spriteImg.current = img; };
-    img.src = config.src;
-  }, [animation]);
+    Promise.all(
+      urls.map(
+        (url) =>
+          new Promise<{ url: string; img: HTMLImageElement }>((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve({ url, img });
+            img.onerror = () => reject(new Error(`Failed to load ${url}`));
+            img.src = url;
+          })
+      )
+    )
+      .then((results) => {
+        if (cancelled) return;
+        const map = new Map<string, HTMLImageElement>();
+        for (const { url, img } of results) map.set(url, img);
+        imagesRef.current = map;
+        setLoaded(true);
+      })
+      .catch(() => { if (!cancelled) setLoaded(true); });
+
+    return () => { cancelled = true; };
+  }, []);
 
   // Animation loop
   useEffect(() => {
@@ -64,14 +75,10 @@ export default function PetSprite({ animation, size = 64, facingLeft = false }: 
 
         ctx!.clearRect(0, 0, size, size);
 
-        const img = spriteImg.current;
+        // Get the correct image from preloaded map — no flash
+        const img = imagesRef.current.get(SPRITE_MAP[animation].src);
         if (img) {
-          // Flip horizontally if facing left
-          if (facingLeft) {
-            ctx!.save();
-            ctx!.scale(-1, 1);
-            ctx!.translate(-size, 0);
-          }
+          if (facingLeft) { ctx!.save(); ctx!.scale(-1, 1); ctx!.translate(-size, 0); }
 
           const fw = img.width / frameCount;
           const sx = frameRef.current * fw;
@@ -86,11 +93,8 @@ export default function PetSprite({ animation, size = 64, facingLeft = false }: 
 
     timerRef.current = requestAnimationFrame(loop);
 
-    return () => {
-      running = false;
-      cancelAnimationFrame(timerRef.current);
-    };
-  }, [animation, size, facingLeft]);
+    return () => { running = false; cancelAnimationFrame(timerRef.current); };
+  }, [animation, size, facingLeft, loaded]);
 
   return <canvas ref={canvasRef} width={size} height={size} className="block" />;
 }
