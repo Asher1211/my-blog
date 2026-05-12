@@ -33,10 +33,10 @@ export default async function PostsPage({
     pagination = result.pagination;
   }
 
-  // Fetch all categories and tags for filter chips
+  // Fetch top categories and tags for filter chips (limit to prevent overflow)
   const [categories, tags] = await Promise.all([
-    prisma.category.findMany({ include: { _count: { select: { posts: true } } }, orderBy: { name: "asc" } }),
-    prisma.tag.findMany({ include: { _count: { select: { posts: true } } }, orderBy: { name: "asc" } }),
+    prisma.category.findMany({ include: { _count: { select: { posts: true } } }, orderBy: { posts: { _count: "desc" } }, take: 10 }),
+    prisma.tag.findMany({ include: { _count: { select: { posts: true } } }, orderBy: { posts: { _count: "desc" } }, take: 10 }),
   ]);
 
   const baseHref = (p: Record<string, string>) => {
@@ -67,15 +67,17 @@ export default async function PostsPage({
             全部
           </Link>
           {categories.map((c) => (
-            <Link
-              key={c.id}
+            <Link key={c.id}
               href={activeCategory === c.slug ? "/posts" : baseHref({ category: c.slug })}
               className="text-xs px-3 py-1 rounded-full transition-colors"
-              style={chipStyle(activeCategory === c.slug)}
-            >
+              style={chipStyle(activeCategory === c.slug)}>
               {c.name} ({c._count.posts})
             </Link>
           ))}
+          <Link href="/categories" className="text-xs px-3 py-1 rounded-full transition-colors"
+            style={{ color: "var(--text-muted)", border: "1px solid var(--border-subtle)" }}>
+            全部 →
+          </Link>
         </div>
 
         {/* Tags */}
@@ -86,15 +88,17 @@ export default async function PostsPage({
             全部
           </Link>
           {tags.filter(t => t._count.posts > 0).map((t) => (
-            <Link
-              key={t.id}
+            <Link key={t.id}
               href={activeTag === t.slug ? "/posts" : baseHref({ tag: t.slug })}
               className="text-xs px-3 py-1 rounded-full transition-colors"
-              style={chipStyle(activeTag === t.slug)}
-            >
+              style={chipStyle(activeTag === t.slug)}>
               #{t.name} ({t._count.posts})
             </Link>
           ))}
+          <Link href="/tags" className="text-xs px-3 py-1 rounded-full transition-colors"
+            style={{ color: "var(--text-muted)", border: "1px solid var(--border-subtle)" }}>
+            全部 →
+          </Link>
         </div>
       </div>
 
