@@ -33,6 +33,9 @@ export default function PetSprite({ animation, size = 64, facingLeft = false }: 
     const config = SPRITE_MAP[animation];
     if (!config) return;
 
+    // Clear old image immediately to prevent flash of wrong spritesheet
+    spriteImg.current = null;
+
     const img = new Image();
     img.onload = () => { spriteImg.current = img; };
     img.src = config.src;
