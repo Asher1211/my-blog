@@ -2,7 +2,7 @@
 
 一个以 Vibe Coding 方式打造的个人学习博客。记录技术学习轨迹，AI 加持的知识库式阅读体验。
 
-**博客地址**: [my-blog-asher1211s-projects.vercel.app](https://my-blog-asher1211s-projects.vercel.app)
+**博客地址**: [my-blog-nayd.vercel.app](https://my-blog-nayd.vercel.app)
 
 ## 项目初衷
 
