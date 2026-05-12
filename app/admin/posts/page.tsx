@@ -12,7 +12,7 @@ export default async function AdminPostsPage({
   searchParams: { page?: string };
 }) {
   const page = Math.max(1, Number(searchParams.page) || 1);
-  const limit = 15;
+  const limit = Math.min(50, Math.max(5, Number(searchParams.limit) || 15));
 
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
@@ -36,13 +36,27 @@ export default async function AdminPostsPage({
         <h1 className="font-display text-2xl" style={{ color: "var(--text-primary)" }}>
           文章管理 <span className="text-sm font-normal" style={{ color: "var(--text-muted)" }}>共 {total} 篇</span>
         </h1>
-        <Link
-          href="/admin/posts/new"
-          className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"
-          style={{ background: "var(--accent-primary)", color: "#fff" }}
-        >
-          新建文章
-        </Link>
+        <div className="flex items-center gap-3">
+          <select
+            value={limit}
+            onChange={(e) => {
+              window.location.href = `/admin/posts?limit=${e.target.value}`;
+            }}
+            className="text-xs px-2 py-1.5 rounded-lg focus:outline-none"
+            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
+          >
+            {[5, 10, 15, 30].map((n) => (
+              <option key={n} value={n}>{n} 篇/页</option>
+            ))}
+          </select>
+          <Link
+            href="/admin/posts/new"
+            className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"
+            style={{ background: "var(--accent-primary)", color: "#fff" }}
+          >
+            新建文章
+          </Link>
+        </div>
       </div>
 
       {posts.length === 0 ? (
@@ -115,7 +129,7 @@ export default async function AdminPostsPage({
             <div className="flex justify-center items-center gap-3 mt-8">
               {page > 1 && (
                 <Link
-                  href={`/admin/posts?page=${page - 1}`}
+                  href={`/admin/posts?page=${page - 1}&limit=${limit}`}
                   className="px-4 py-2 rounded-lg text-sm transition-colors hover:bg-[var(--bg-elevated)]"
                   style={{ border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
                 >
@@ -127,7 +141,7 @@ export default async function AdminPostsPage({
               </span>
               {page < totalPages && (
                 <Link
-                  href={`/admin/posts?page=${page + 1}`}
+                  href={`/admin/posts?page=${page + 1}&limit=${limit}`}
                   className="px-4 py-2 rounded-lg text-sm transition-colors hover:bg-[var(--bg-elevated)]"
                   style={{ border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
                 >

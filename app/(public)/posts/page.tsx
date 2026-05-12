@@ -9,26 +9,27 @@ export const revalidate = 60;
 export default async function PostsPage({
   searchParams,
 }: {
-  searchParams: { page?: string; tag?: string; category?: string };
+  searchParams: { page?: string; tag?: string; category?: string; limit?: string };
 }) {
   const page = Math.max(1, Number(searchParams.page) || 1);
+  const limit = Math.min(50, Math.max(5, Number(searchParams.limit) || 10));
   const activeTag = searchParams.tag || "";
   const activeCategory = searchParams.category || "";
 
   // Fetch posts based on filter
   let posts: PostListItem[] = [];
-  let pagination = { page, limit: 10, total: 0, totalPages: 1 };
+  let pagination = { page, limit, total: 0, totalPages: 1 };
 
   if (activeTag) {
-    const result = await getPostsByTag(activeTag, page);
+    const result = await getPostsByTag(activeTag, page, limit);
     posts = result.posts;
     pagination = result.pagination;
   } else if (activeCategory) {
-    const result = await getPostsByCategory(activeCategory, page);
+    const result = await getPostsByCategory(activeCategory, page, limit);
     posts = result.posts;
     pagination = result.pagination;
   } else {
-    const result = await getPublishedPosts(page);
+    const result = await getPublishedPosts(page, limit);
     posts = result.posts;
     pagination = result.pagination;
   }
@@ -41,6 +42,7 @@ export default async function PostsPage({
 
   const baseHref = (p: Record<string, string>) => {
     const params = new URLSearchParams();
+    p.limit = String(limit);
     Object.entries(p).forEach(([k, v]) => { if (v) params.set(k, v); });
     return `/posts?${params.toString()}`;
   };
@@ -52,10 +54,24 @@ export default async function PostsPage({
 
   return (
     <div className="max-w-content mx-auto px-6 py-12">
-      <h1 className="font-display text-3xl mb-6" style={{ color: "var(--text-primary)" }}>
-        文章 {activeTag && <span className="text-lg">· #{activeTag}</span>}
-        {activeCategory && <span className="text-lg">· {categories.find(c => c.slug === activeCategory)?.name || activeCategory}</span>}
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-display text-3xl" style={{ color: "var(--text-primary)" }}>
+          文章 {activeTag && <span className="text-lg">· #{activeTag}</span>}
+          {activeCategory && <span className="text-lg">· {categories.find(c => c.slug === activeCategory)?.name || activeCategory}</span>}
+        </h1>
+        <select
+          value={limit}
+          onChange={(e) => {
+            window.location.href = baseHref({ limit: e.target.value, tag: activeTag, category: activeCategory });
+          }}
+          className="text-xs px-2 py-1.5 rounded-lg focus:outline-none"
+          style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
+        >
+          {[5, 10, 15, 30].map((n) => (
+            <option key={n} value={n}>{n} 篇/页</option>
+          ))}
+        </select>
+      </div>
 
       {/* Filter chips */}
       <div className="mb-8 space-y-3">
