@@ -8,6 +8,8 @@ import ThemeToggle from "@/components/common/ThemeToggle";
 const NAV_ITEMS = [
   { href: "/", label: "首页" },
   { href: "/posts", label: "文章" },
+  { href: "/categories", label: "分类" },
+  { href: "/tags", label: "标签" },
   { href: "/timeline", label: "时间线" },
   { href: "/about", label: "关于" },
 ];
