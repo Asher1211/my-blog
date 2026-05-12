@@ -18,7 +18,9 @@ export default async function CategoriesPage() {
       <form action={addCategory} className="flex gap-2 mb-6">
         <input name="name" required placeholder="分类名称" className="flex-1 px-3 py-2 rounded-lg text-sm focus:outline-none"
           style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-primary)" }} />
-        <input name="color" placeholder="#颜色" className="w-24 px-3 py-2 rounded-lg text-sm focus:outline-none"
+        <input name="description" placeholder="描述(可选)" className="w-32 px-3 py-2 rounded-lg text-sm focus:outline-none"
+          style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-primary)" }} />
+        <input name="color" placeholder="#颜色" className="w-20 px-3 py-2 rounded-lg text-sm focus:outline-none"
           style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-primary)" }} />
         <button type="submit" className="px-4 py-2 rounded-lg text-sm font-medium"
           style={{ background: "var(--accent-primary)", color: "#fff" }}>
@@ -49,13 +51,13 @@ async function addCategory(formData: FormData) {
   const color = (formData.get("color") as string) || null;
   if (!name) return;
 
+  const description = (formData.get("description") as string) || null;
   const slug = generateCategorySlug(name);
 
-  // Use upsert to handle duplicate names gracefully
   await prisma.category.upsert({
     where: { name },
-    create: { name, slug, color },
-    update: { color: color || undefined },
+    create: { name, slug, color, description },
+    update: { color: color || undefined, description: description || null },
   });
 
   revalidatePath("/admin/categories");

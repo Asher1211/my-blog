@@ -7,15 +7,21 @@ export const revalidate = 60;
 
 export default async function CategoryPage({ params }: { params: { category: string } }) {
   const [catInfo, { posts }] = await Promise.all([
-    prisma.category.findUnique({ where: { slug: params.category }, select: { name: true } }),
+    prisma.category.findUnique({ where: { slug: params.category }, select: { name: true, description: true, color: true } }),
     getPostsByCategory(params.category),
   ]);
 
   return (
     <div className="max-w-content mx-auto px-6 py-12">
-      <h1 className="font-display text-3xl mb-2" style={{ color: "var(--text-primary)" }}>
-        分类: {catInfo?.name ?? params.category}
-      </h1>
+      <div className="flex items-center gap-3 mb-2">
+        {catInfo?.color && <span className="w-4 h-4 rounded-full" style={{ background: catInfo.color }} />}
+        <h1 className="font-display text-3xl" style={{ color: "var(--text-primary)" }}>
+          {catInfo?.name ?? params.category}
+        </h1>
+      </div>
+      {catInfo?.description && (
+        <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>{catInfo.description}</p>
+      )}
       <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>
         {posts.length} 篇文章
       </p>
