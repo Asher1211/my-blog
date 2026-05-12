@@ -102,8 +102,8 @@ export default function DeskPet() {
       const ty = 48 + Math.random() * (h - 48);
       targetRef.current = { x: tx, y: ty };
 
-      // Face direction
-      setFacingLeft(tx < posRef.current.x);
+      // Face direction (inverted: sprite faces left by default?)
+      setFacingLeft(tx > posRef.current.x);
       setAnim("walk");
 
       // Stop wandering after reaching destination or timeout
@@ -153,11 +153,11 @@ export default function DeskPet() {
         const dy = targetRef.current.y - posRef.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist > 0.5) {
-          const speed = 1.2;
+          const speed = 0.5;
           const nx = posRef.current.x + (dx / dist) * speed;
           const ny = posRef.current.y + (dy / dist) * speed;
           setPos({ x: nx, y: ny });
-          setFacingLeft(dx < 0);
+          setFacingLeft(dx > 0);
         }
       }
 
@@ -186,7 +186,7 @@ export default function DeskPet() {
     dragDist.current += Math.abs(e.movementX) + Math.abs(e.movementY);
     const nx = e.clientX - dragOffset.current.x;
     const ny = e.clientY - dragOffset.current.y;
-    setFacingLeft(e.movementX < 0);
+    setFacingLeft(e.movementX > 0);
     setPos({
       x: Math.min(Math.max(nx, 0), window.innerWidth - PET_SIZE),
       y: Math.min(Math.max(ny, 48), window.innerHeight - PET_SIZE),
@@ -268,7 +268,7 @@ export default function DeskPet() {
         }}
       >
         {bubble && !chatOpen && (
-          <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap" style={{ transform: `translateX(-50%)${facingLeft ? " scaleX(-1)" : ""}` }}>
+          <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap">
             <div className="px-3 py-1.5 rounded-xl text-xs shadow-lg animate-fade-in"
               style={{ background: "var(--bg-overlay)", color: "var(--text-primary)", border: "1px solid var(--border-subtle)" }}>
               {bubble}

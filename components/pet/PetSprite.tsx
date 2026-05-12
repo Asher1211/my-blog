@@ -11,9 +11,9 @@ interface SpriteConfig {
 }
 
 const SPRITE_MAP: Record<PetAnimation, SpriteConfig> = {
-  idle: { src: "/pet/idle.png", frames: 22, fps: 44 },
-  walk: { src: "/pet/walk.png", frames: 12, fps: 24 },
-  chat: { src: "/pet/chat.png", frames: 9, fps: 18 },
+  idle: { src: "/pet/idle.png", frames: 22, fps: 12 },
+  walk: { src: "/pet/walk.png", frames: 12, fps: 10 },
+  chat: { src: "/pet/chat.png", frames: 9, fps: 9 },
 };
 
 interface Props {
