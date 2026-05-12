@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { generateSlug } from "@/lib/utils/slug";
+import ImageUploader from "./ImageUploader";
 
 interface EditorProps {
   initialTitle?: string;
@@ -229,8 +230,15 @@ export default function MarkdownEditor({
             />
           </div>
           <div>
-            <label style={labelStyle}>封面图 URL</label>
-            <input value={coverImage} onChange={(e) => setCoverImage(e.target.value)} className={inputClass} style={inputStyle} placeholder="https://..." />
+            <label style={labelStyle}>封面图</label>
+            <input value={coverImage} onChange={(e) => setCoverImage(e.target.value)} className={inputClass} style={inputStyle} placeholder="输入 URL 或上传图片" />
+            <div className="mt-2">
+              <ImageUploader onUploaded={(url) => setCoverImage(url)} />
+            </div>
+            <label style={labelStyle} className="mt-3 block">正文插图</label>
+            <div className="mb-2">
+              <ImageUploader onUploaded={(url) => setContent(content + `\n![](${url})\n`)} />
+            </div>
           </div>
           <div className="sm:col-span-2">
             <label style={labelStyle}>摘要</label>
