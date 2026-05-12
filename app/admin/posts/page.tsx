@@ -34,12 +34,12 @@ export default async function AdminPostsPage() {
           <thead>
             <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
               <th className="text-left p-3" style={{ color: "var(--text-muted)" }}>标题</th>
-              <th className="text-left p-3 hidden sm:table-cell" style={{ color: "var(--text-muted)" }}>状态</th>
+              <th className="text-left p-3 hidden sm:table-cell whitespace-nowrap" style={{ color: "var(--text-muted)" }}>状态</th>
               <th className="text-left p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>分类</th>
-              <th className="text-left p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>阅读</th>
-              <th className="text-left p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>字数</th>
-              <th className="text-left p-3 hidden lg:table-cell" style={{ color: "var(--text-muted)" }}>日期</th>
-              <th className="text-right p-3" style={{ color: "var(--text-muted)" }}>操作</th>
+              <th className="text-right p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>阅读</th>
+              <th className="text-right p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>字数</th>
+              <th className="text-left p-3 hidden lg:table-cell whitespace-nowrap" style={{ color: "var(--text-muted)" }}>日期</th>
+              <th className="text-right p-3 whitespace-nowrap" style={{ color: "var(--text-muted)" }}>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +57,7 @@ export default async function AdminPostsPage() {
                       {post.title}
                     </Link>
                   </td>
-                  <td className="p-3 hidden sm:table-cell">
+                  <td className="p-3 hidden sm:table-cell whitespace-nowrap">
                     <span className="text-xs px-2 py-0.5 rounded-full" style={{
                       background: post.published ? "rgba(34,197,94,0.1)" : "var(--accent-glow)",
                       color: post.published ? "#22c55e" : "var(--accent-primary)",
@@ -68,10 +68,10 @@ export default async function AdminPostsPage() {
                   <td className="p-3 hidden md:table-cell" style={{ color: "var(--text-secondary)" }}>
                     {post.category?.name || "-"}
                   </td>
-                  <td className="p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>
+                  <td className="p-3 hidden md:table-cell text-right" style={{ color: "var(--text-muted)" }}>
                     {post.views}
                   </td>
-                  <td className="p-3 hidden md:table-cell" style={{ color: "var(--text-muted)" }}>
+                  <td className="p-3 hidden md:table-cell text-right" style={{ color: "var(--text-muted)" }}>
                     {post.wordCount}
                   </td>
                   <td className="p-3 hidden lg:table-cell" style={{ color: "var(--text-muted)" }}>
