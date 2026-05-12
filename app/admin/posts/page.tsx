@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db/prisma";
 import { formatDate } from "@/lib/utils/date";
 import { revalidatePath } from "next/cache";
 import DeleteButton from "@/components/admin/DeleteButton";
+import PageSizeSelect from "@/components/common/PageSizeSelect";
 
 export const dynamic = "force-dynamic";
 
@@ -37,18 +38,13 @@ export default async function AdminPostsPage({
           文章管理 <span className="text-sm font-normal" style={{ color: "var(--text-muted)" }}>共 {total} 篇</span>
         </h1>
         <div className="flex items-center gap-3">
-          <select
+          <PageSizeSelect
             value={limit}
-            onChange={(e) => {
-              window.location.href = `/admin/posts?limit=${e.target.value}`;
+            options={[5, 10, 15, 30]}
+            onChange={(v) => {
+              window.location.href = `/admin/posts?limit=${v}`;
             }}
-            className="text-xs px-2 py-1.5 rounded-lg focus:outline-none"
-            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
-          >
-            {[5, 10, 15, 30].map((n) => (
-              <option key={n} value={n}>{n} 篇/页</option>
-            ))}
-          </select>
+          />
           <Link
             href="/admin/posts/new"
             className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"

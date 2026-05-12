@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db/prisma";
 import { getPublishedPosts, getPostsByTag, getPostsByCategory } from "@/lib/data/posts";
 import PostCard from "@/components/blog/PostCard";
+import PageSizeSelect from "@/components/common/PageSizeSelect";
 import type { PostListItem } from "@/types";
 
 export const revalidate = 60;
@@ -59,18 +60,13 @@ export default async function PostsPage({
           文章 {activeTag && <span className="text-lg">· #{activeTag}</span>}
           {activeCategory && <span className="text-lg">· {categories.find(c => c.slug === activeCategory)?.name || activeCategory}</span>}
         </h1>
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            window.location.href = baseHref({ limit: e.target.value, tag: activeTag, category: activeCategory });
+          options={[5, 10, 15, 30]}
+          onChange={(v) => {
+            window.location.href = baseHref({ limit: String(v), tag: activeTag, category: activeCategory });
           }}
-          className="text-xs px-2 py-1.5 rounded-lg focus:outline-none"
-          style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--text-secondary)" }}
-        >
-          {[5, 10, 15, 30].map((n) => (
-            <option key={n} value={n}>{n} 篇/页</option>
-          ))}
-        </select>
+        />
       </div>
 
       {/* Filter chips */}
