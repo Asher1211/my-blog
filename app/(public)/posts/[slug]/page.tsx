@@ -14,7 +14,19 @@ interface Props { params: { slug: string } }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return { title: "文章未找到" };
-  return { title: post.title, description: post.excerpt || undefined };
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://asher1211.blog";
+  return {
+    title: post.title,
+    description: post.excerpt || undefined,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || "",
+      type: "article",
+      publishedTime: post.publishedAt || post.createdAt,
+      url: `${baseUrl}/posts/${post.slug}`,
+      images: post.coverImage ? [{ url: post.coverImage }] : [],
+    },
+  };
 }
 
 export default async function PostDetailPage({ params }: Props) {
