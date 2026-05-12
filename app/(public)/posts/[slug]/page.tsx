@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPostBySlug } from "@/lib/data/posts";
+import { prisma } from "@/lib/db/prisma";
 import { processMarkdown } from "@/lib/markdown/processor";
 import { formatDate } from "@/lib/utils/date";
 import ScrollProgress from "@/components/common/ScrollProgress";
@@ -32,6 +33,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PostDetailPage({ params }: Props) {
   const post = await getPostBySlug(params.slug);
   if (!post) notFound();
+
+  // Prev / next navigation
+  const [prevPost, nextPost] = await Promise.all([
+    prisma.post.findFirst({
+      where: { published: true, publishedAt: { lt: new Date(post.publishedAt || post.createdAt) } },
+      select: { title: true, slug: true },
+      orderBy: { publishedAt: "desc" },
+    }),
+    prisma.post.findFirst({
+      where: { published: true, publishedAt: { gt: new Date(post.publishedAt || post.createdAt) } },
+      select: { title: true, slug: true },
+      orderBy: { publishedAt: "asc" },
+    }),
+  ]);
 
   const html = await processMarkdown(post.content);
 
@@ -101,6 +116,30 @@ export default async function PostDetailPage({ params }: Props) {
                 ))}
               </div>
             )}
+
+            {/* Prev / Next navigation */}
+            <nav className="flex justify-between gap-4 mt-12 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+              <div className="flex-1">
+                {prevPost ? (
+                  <Link href={`/posts/${prevPost.slug}`} className="block group">
+                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>← 上一篇</span>
+                    <span className="block text-sm mt-1 group-hover:underline" style={{ color: "var(--text-secondary)" }}>
+                      {prevPost.title}
+                    </span>
+                  </Link>
+                ) : <span className="text-xs" style={{ color: "var(--text-muted)" }}>已是第一篇</span>}
+              </div>
+              <div className="flex-1 text-right">
+                {nextPost ? (
+                  <Link href={`/posts/${nextPost.slug}`} className="block group">
+                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>下一篇 →</span>
+                    <span className="block text-sm mt-1 group-hover:underline" style={{ color: "var(--text-secondary)" }}>
+                      {nextPost.title}
+                    </span>
+                  </Link>
+                ) : <span className="text-xs" style={{ color: "var(--text-muted)" }}>已是最后一篇</span>}
+              </div>
+            </nav>
           </article>
 
           {/* Right sidebar: TOC */}
