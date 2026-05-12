@@ -62,7 +62,7 @@ export default function ParticleBackground() {
       const isLight = document.documentElement.classList.contains("light");
       const color = isLight ? "100, 70, 40" : "212, 168, 84";
       const particleBaseAlpha = isLight ? 1.5 : 0.5;
-      const lineBaseAlpha = isLight ? 0.25 : 0.06;
+      const lineBaseAlpha = isLight ? 0.35 : 0.06;
       const lineDist = isLight ? 160 : 120;
 
       for (let i = particles.length - 1; i >= 0; i--) {
@@ -97,7 +97,7 @@ export default function ParticleBackground() {
             ctx!.moveTo(p.x, p.y);
             ctx!.lineTo(p2.x, p2.y);
             ctx!.strokeStyle = `rgba(${color}, ${lineAlpha})`;
-            ctx!.lineWidth = 0.5;
+            ctx!.lineWidth = isLight ? 0.8 : 0.5;
             ctx!.stroke();
           }
         }
