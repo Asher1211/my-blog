@@ -10,6 +10,7 @@ const NAV = [
   { href: "/admin/posts", label: "文章管理" },
   { href: "/admin/posts/new", label: "新建文章" },
   { href: "/admin/categories", label: "分类管理" },
+  { href: "/admin/tags", label: "标签管理" },
 ];
 
 export default function AdminSidebar() {
