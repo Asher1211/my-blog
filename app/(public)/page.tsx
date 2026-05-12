@@ -6,10 +6,11 @@ import PostCard from "@/components/blog/PostCard";
 export const revalidate = 60; // ISR: 每60秒刷新
 
 export default async function HomePage() {
-  const [{ posts }, tagCount, categoryCount] = await Promise.all([
+  const [{ posts }, tagCount, categoryCount, totalPosts] = await Promise.all([
     getLatestPosts(6),
     prisma.tag.count(),
     prisma.category.count(),
+    prisma.post.count({ where: { published: true } }),
   ]);
 
   return (
@@ -59,7 +60,7 @@ export default async function HomePage() {
       {/* Stats bar */}
       <section className="grid grid-cols-3 gap-4 max-w-md mx-auto mb-16 animate-fade-in" style={{ animationDelay: "0.4s" }}>
         {[
-          { label: "文章", value: posts.length },
+          { label: "文章", value: totalPosts },
           { label: "标签", value: tagCount },
           { label: "分类", value: categoryCount },
         ].map((stat) => (
