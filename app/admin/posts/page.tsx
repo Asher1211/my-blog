@@ -38,7 +38,7 @@ export default async function AdminPostsPage({
           文章管理 <span className="text-sm font-normal" style={{ color: "var(--text-muted)" }}>共 {total} 篇</span>
         </h1>
         <div className="flex items-center gap-3">
-          <PageSizeSelect options={[5, 10, 15, 30]} />
+          <PageSizeSelect options={[5, 10, 15, 30]} current={limit} />
           <Link
             href="/admin/posts/new"
             className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"

@@ -60,7 +60,7 @@ export default async function PostsPage({
           文章 {activeTag && <span className="text-lg">· #{activeTag}</span>}
           {activeCategory && <span className="text-lg">· {categories.find(c => c.slug === activeCategory)?.name || activeCategory}</span>}
         </h1>
-        <PageSizeSelect options={[5, 10, 15, 30]} />
+        <PageSizeSelect options={[5, 10, 15, 30]} current={limit} />
       </div>
 
       {/* Filter chips */}
