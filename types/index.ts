@@ -18,29 +18,3 @@ export interface PostDetail extends PostListItem {
   content: string;
   updatedAt: string;
 }
-
-export interface AiChatRequest {
-  postId: string;
-  question: string;
-  history: { role: "user" | "assistant"; content: string }[];
-}
-
-export interface AiSearchRequest {
-  query: string;
-}
-
-export interface AiSearchResult {
-  postId: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  relevance: string;
-}
-
-export interface PetChatRequest {
-  message: string;
-  context: {
-    pageTitle?: string;
-    category?: string;
-  };
-}

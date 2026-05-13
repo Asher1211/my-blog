@@ -30,5 +30,3 @@ export async function processMarkdown(content: string): Promise<string> {
   const result = await processor.process(content);
   return String(result);
 }
-
-export { processor };

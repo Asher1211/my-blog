@@ -25,10 +25,3 @@ export function notFound(entity = "文章") {
     { status: 404 }
   );
 }
-
-export function badRequest(message: string) {
-  return NextResponse.json(
-    { error: message },
-    { status: 400 }
-  );
-}

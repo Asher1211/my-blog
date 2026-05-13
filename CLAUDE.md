@@ -15,9 +15,9 @@ A personal learning blog with AI-powered chat and a desktop pet mascot. Public-f
 | Framework | Next.js 14 (App Router) — SSR/SSG, API Routes |
 | Styling | Tailwind CSS + Framer Motion |
 | Database | PostgreSQL via Neon serverless (free tier) |
-| ORM | Prisma with pgvector extension |
+| ORM | Prisma |
 | Auth | NextAuth.js v5 |
-| AI | Anthropic Claude API (streaming chat) + Voyage AI or OpenAI for embeddings |
+| AI | DeepSeek Chat API (streaming) |
 | File storage | Cloudflare R2 |
 | Markdown | unified + remark + rehype + Shiki (highlighting) + KaTeX (math) |
 | Deployment | Vercel Hobby Plan |
@@ -37,25 +37,21 @@ app/
   (public)/       — Blog frontend (home, posts, tags, categories, search, timeline)
   (admin)/        — Admin backend (dashboard, post editor, media, categories, settings)
     layout.tsx    — Protected by auth (redirect to login if no session)
-  api/            — API routes (posts CRUD, AI chat/search/embed, pet, upload, search)
+  api/            — API routes (posts CRUD, pet, upload, search, categories, tags)
   layout.tsx      — Root layout (global styles, fonts, desk pet mount point)
 
 components/
-  ui/             — Atomic UI primitives (Button, Badge, Card, Modal, Tooltip)
   layout/         — Header, Footer, AdminSidebar
-  blog/           — PostCard, PostList, PostDetail, TagCloud, CategoryTree, Timeline
-  ai/             — AiChatPanel, AiSearchWidget, ChatMessage, AiTypingEffect
-  pet/            — DeskPet (Canvas), PetSprite, PetBubble, PetToolbar, PetEmotionBadge
-  editor/         — MarkdownEditor, ImageUploader, EditorToolbar
-  common/         — ThemeToggle, ScrollProgress, TableOfContents, CopyButton, ReadingTime
+  blog/           — PostCard
+  pet/            — DeskPet, PetSprite
+  editor/         — MarkdownEditor, ImageUploader
+  common/         — ThemeToggle, ScrollProgress, TableOfContents, CustomCursor,
+                    ParticleBackground, GiscusComments, ShareButton, PageSizeSelect, GitHubStar
 
 lib/
   db/prisma.ts    — Prisma client singleton
-  ai/             — claude.ts (streaming), embedding.ts, prompts.ts
-  pet/            — stateMachine.ts, petAi.ts, persistence.ts
+  ai/             — deepseek.ts (streaming), prompts.ts
   markdown/       — processor.ts (unified config), plugins.ts
-  storage/r2.ts   — Cloudflare R2 upload wrapper
-  search/vector.ts — pgvector semantic search
 
 prisma/schema.prisma
 middleware.ts      — Route protection for /admin/*
@@ -77,13 +73,9 @@ middleware.ts      — Route protection for /admin/*
 
 Canvas-rendered pixel-art sprite (32x32 frames, 3x scale → 96px display) with 6-state machine: idle → walk → read → chat → sleep → excited. State transitions driven by user behavior events (page visibility, scroll progress, idle time). Position saved in localStorage. AI-powered conversation via `/api/pet` with a character persona ("卷卷", a film-reel-hat researcher).
 
-## Database (pgvector)
-
-`Post.embedding` is a `vector(1536)` column with ivfflat index for cosine similarity search. Trigger re-embedding on post publish/update via `/api/ai/embed`.
-
 ## API Rate Limiting
 
-AI endpoints must be rate-limited: max 10 requests/min per IP for `/api/ai/chat`, max 20/min for `/api/pet`.
+AI endpoints should be rate-limited: max 20 requests/min per IP for `/api/pet`.
 
 ## Key Conventions from Design Doc
 
