@@ -48,14 +48,15 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
-          <a href="https://github.com/Asher1211/my-blog" target="_blank" rel="noopener noreferrer"
-            className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-[var(--bg-elevated)]"
-            style={{ color: "var(--text-muted)" }}
-            title="Star on GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-          </a>
+          <iframe
+            src="https://ghbtns.com/github-btn.html?user=Asher1211&repo=my-blog&type=star&count=true&size=small"
+            frameBorder="0"
+            scrolling="0"
+            width="100"
+            height="20"
+            title="GitHub Star"
+            style={{ marginTop: 2 }}
+          />
           <Link href="/search" aria-label="搜索"
             className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-[var(--bg-elevated)]"
             style={{ color: "var(--text-secondary)" }}>
