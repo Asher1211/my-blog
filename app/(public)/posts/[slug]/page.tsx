@@ -101,7 +101,10 @@ export default async function PostDetailPage({ params }: Props) {
                 {post.title}
               </h1>
               <div className="flex gap-4 text-sm items-center flex-wrap" style={{ color: "var(--text-muted)" }}>
-                <span>{formatDate(post.publishedAt ?? post.createdAt)}</span>
+                <span>{formatDateTime(post.publishedAt ?? post.createdAt)}</span>
+                {post.updatedAt !== post.publishedAt && (
+                  <span style={{ color: "var(--text-muted)" }}>更新于 {formatDateTime(post.updatedAt)}</span>
+                )}
                 <span>{post.wordCount} 字</span>
                 <span>约 {post.readingTime} 分钟</span>
                 <span>{post.views} 次阅读</span>

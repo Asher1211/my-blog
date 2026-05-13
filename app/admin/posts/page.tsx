@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db/prisma";
-import { formatDate } from "@/lib/utils/date";
+import { formatDate, formatDateTime } from "@/lib/utils/date";
 import { revalidatePath } from "next/cache";
 import DeleteButton from "@/components/admin/DeleteButton";
 import PageSizeSelect from "@/components/common/PageSizeSelect";
