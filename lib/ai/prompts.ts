@@ -10,7 +10,7 @@ export function buildArticleChatPrompt(article: {
 标签：${article.tags.join("、")}
 
 【文章内容】
-${article.content.slice(0, 8000)}
+${article.content}
 
 【你的职责】
 1. 基于上述文章内容回答读者的问题，优先引用文章原文。

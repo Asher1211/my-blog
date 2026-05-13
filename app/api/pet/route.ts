@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { streamChat } from "@/lib/ai/deepseek";
-import { PET_SYSTEM_PROMPT, buildArticleChatPrompt, buildSearchPrompt } from "@/lib/ai/prompts";
+import { PET_SYSTEM_PROMPT, buildSearchPrompt } from "@/lib/ai/prompts";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         include: { tags: { select: { tag: { select: { name: true } } } } },
       });
       if (post) {
-        systemPrompt = `你是卷卷，博主的小助手。\n\n【读者正在阅读】\n标题：《${post.title}》\n内容：${post.content.slice(0, 3000)}\n\n${PET_SYSTEM_PROMPT}\n\n如果读者问这篇相关的问题，请基于文章内容回答。`;
+        systemPrompt = `你是卷卷，博主的小助手。\n\n【读者正在阅读】\n标题：《${post.title}》\n内容：\n${post.content}\n\n${PET_SYSTEM_PROMPT}\n\n如果读者问这篇相关的问题，请基于文章内容回答。`;
       }
     }
 
