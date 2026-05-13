@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ThemeToggle from "@/components/common/ThemeToggle";
+import GitHubStar from "@/components/common/GitHubStar";
 
 const NAV_ITEMS = [
   { href: "/", label: "首页" },
