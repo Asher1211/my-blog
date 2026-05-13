@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db/prisma";
-import { formatDate } from "@/lib/utils/date";
 
 export const revalidate = 60;
 
@@ -11,15 +10,16 @@ export default async function TimelinePage() {
     orderBy: { publishedAt: "desc" },
   });
 
-  // Group by full date (YYYY-MM-DD)
+  // Group by date — use local timezone, not UTC
   const grouped: [string, typeof posts][] = [];
   for (const p of posts) {
-    const dateStr = (p.publishedAt || p.createdAt).toISOString().slice(0, 10);
+    const d = new Date(p.publishedAt || p.createdAt);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     const last = grouped[grouped.length - 1];
-    if (last && last[0] === dateStr) {
+    if (last && last[0] === key) {
       last[1].push(p);
     } else {
-      grouped.push([dateStr, [p]]);
+      grouped.push([key, [p]]);
     }
   }
 
@@ -30,18 +30,17 @@ export default async function TimelinePage() {
 
       <div className="relative ml-4">
         <div className="absolute left-0 top-0 bottom-0 w-px" style={{ background: "var(--border-default)" }} />
-
         <div className="space-y-10">
-          {grouped.map(([dateStr, items]) => {
-            const [y, m, d] = dateStr.split("-");
+          {grouped.map(([key, items]) => {
+            const d = new Date(items[0].publishedAt || items[0].createdAt);
             return (
-              <section key={dateStr} className="relative pl-10">
+              <section key={key} className="relative pl-10">
                 <div
                   className="absolute left-0 top-1 w-3 h-3 rounded-full -translate-x-[5px]"
                   style={{ background: "var(--accent-primary)", boxShadow: "var(--accent-glow)" }}
                 />
                 <h2 className="font-display text-lg mb-4" style={{ color: "var(--text-primary)" }}>
-                  {Number(y)}年{Number(m)}月{Number(d)}日
+                  {d.getFullYear()}年{d.getMonth() + 1}月{d.getDate()}日
                 </h2>
                 <div className="space-y-3">
                   {items.map((post) => (
