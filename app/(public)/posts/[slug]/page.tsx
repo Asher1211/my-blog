@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getPostBySlug } from "@/lib/data/posts";
 import { prisma } from "@/lib/db/prisma";
 import { processMarkdown } from "@/lib/markdown/processor";
-import { formatDate } from "@/lib/utils/date";
+import { formatDate, formatDateTime } from "@/lib/utils/date";
 import ScrollProgress from "@/components/common/ScrollProgress";
 import TableOfContents from "@/components/common/TableOfContents";
 import GiscusComments from "@/components/common/GiscusComments";
