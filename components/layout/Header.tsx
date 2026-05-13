@@ -48,15 +48,7 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
-          <iframe
-            src="https://ghbtns.com/github-btn.html?user=Asher1211&repo=my-blog&type=star&count=true&size=small"
-            frameBorder="0"
-            scrolling="0"
-            width="100"
-            height="20"
-            title="GitHub Star"
-            style={{ marginTop: 2 }}
-          />
+          <GitHubStar />
           <Link href="/search" aria-label="搜索"
             className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-[var(--bg-elevated)]"
             style={{ color: "var(--text-secondary)" }}>
