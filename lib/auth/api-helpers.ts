@@ -1,7 +1,11 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
-export async function requireAdmin() {
+export async function requireAdmin(req?: Request) {
+  const apiKey = req?.headers.get("x-api-key");
+  if (apiKey && apiKey === process.env.ADMIN_API_KEY) {
+    return null;
+  }
   const session = await auth();
   if (!session) {
     return NextResponse.json(

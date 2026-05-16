@@ -34,7 +34,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const authError = await requireAdmin();
+  const authError = await requireAdmin(req);
   if (authError) return authError;
 
   const existing = await prisma.post.findUnique({
@@ -88,7 +88,7 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const authError = await requireAdmin();
+  const authError = await requireAdmin(req);
   if (authError) return authError;
 
   const existing = await prisma.post.findUnique({

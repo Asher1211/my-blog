@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const authError = await requireAdmin();
+  const authError = await requireAdmin(req);
   if (authError) return authError;
 
   let body: unknown;
@@ -122,8 +122,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const session = await import("@/auth").then((m) => m.auth());
-  if (!session?.user?.id) return unauthorized();
+  let authorId: string;
+  if (req.headers.get("x-api-key") === process.env.ADMIN_API_KEY) {
+    const u = await prisma.user.findFirst();
+    if (!u) return unauthorized();
+    authorId = u.id;
+  } else {
+    const session = await import("@/auth").then((m) => m.auth());
+    if (!session?.user?.id) return unauthorized();
+    authorId = session.user.id;
+  }
 
   const post = await prisma.post.create({
     data: {
@@ -136,7 +144,7 @@ export async function POST(req: NextRequest) {
       publishedAt: published ? new Date() : null,
       wordCount,
       readingTime,
-      authorId: session.user.id,
+      authorId,
       categoryId: categoryId || null,
       tags: tags?.length
         ? {
