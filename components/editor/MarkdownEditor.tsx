@@ -58,6 +58,7 @@ export default function MarkdownEditor({
   const [message, setMessage] = useState("");
   const [tab, setTab] = useState<"write" | "settings">("write");
   const loadedRef = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -256,6 +257,34 @@ export default function MarkdownEditor({
             style={{ color: "var(--text-primary)", border: "none" }}
             placeholder="文章标题..."
           />
+          <div className="flex items-center gap-2 mb-3">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".md,.markdown,.txt"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => setContent(ev.target?.result as string);
+                reader.readAsText(file);
+                e.target.value = "";
+              }}
+              hidden
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="text-xs px-3 py-1 rounded-full transition-all"
+              style={{
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border-subtle)",
+                color: "var(--text-muted)",
+              }}
+            >
+              导入 .md 文件
+            </button>
+          </div>
           <MDEditor
             value={content}
             onChange={(v) => setContent(v || "")}

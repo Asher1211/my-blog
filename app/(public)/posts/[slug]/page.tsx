@@ -8,6 +8,7 @@ import ScrollProgress from "@/components/common/ScrollProgress";
 import TableOfContents from "@/components/common/TableOfContents";
 import GiscusComments from "@/components/common/GiscusComments";
 import ShareButton from "@/components/common/ShareButton";
+import DownloadMdButton from "@/components/common/DownloadMdButton";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -109,6 +110,7 @@ export default async function PostDetailPage({ params }: Props) {
                 <span>约 {post.readingTime} 分钟</span>
                 <span>{post.views} 次阅读</span>
                 <ShareButton />
+                <DownloadMdButton content={post.content} title={post.title} />
               </div>
             </header>
 
