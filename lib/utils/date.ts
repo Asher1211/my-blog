@@ -3,6 +3,7 @@ export function formatDate(date: string | Date, locale = "zh-CN"): string {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "Asia/Shanghai",
   });
 }
 
@@ -13,5 +14,6 @@ export function formatDateTime(date: string | Date, locale = "zh-CN"): string {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Shanghai",
   });
 }
