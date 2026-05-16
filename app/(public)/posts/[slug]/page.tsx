@@ -51,8 +51,8 @@ export default async function PostDetailPage({ params }: Props) {
     }),
   ]);
 
-  // Increment view count (fire and forget)
-  prisma.post.update({ where: { id: post.id }, data: { views: { increment: 1 } } }).catch(() => {});
+  // Increment view count without touching updatedAt
+  prisma.$executeRaw`UPDATE "Post" SET "views" = "views" + 1 WHERE id = ${post.id}`.catch(() => {});
 
   const html = await processMarkdown(post.content);
 
