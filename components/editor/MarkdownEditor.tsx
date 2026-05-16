@@ -280,7 +280,7 @@ export default function MarkdownEditor({
             >
               导入 .md 文件
             </button>
-            <ImageUploader onUploaded={(url) => setContent(content + `\n![](${url})\n`)} />
+            <ImageUploader compact onUploaded={(url) => setContent(content + `\n![](${url})\n`)} />
           </div>
           <MDEditor
             value={content}

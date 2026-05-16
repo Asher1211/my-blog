@@ -4,9 +4,10 @@ import { useState, useRef, useCallback } from "react";
 
 interface Props {
   onUploaded: (url: string) => void;
+  compact?: boolean;
 }
 
-export default function ImageUploader({ onUploaded }: Props) {
+export default function ImageUploader({ onUploaded, compact }: Props) {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,6 +42,32 @@ export default function ImageUploader({ onUploaded }: Props) {
     if (file) upload(file);
     if (inputRef.current) inputRef.current.value = "";
   }, [upload]);
+
+  if (compact) {
+    return (
+      <>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={onFileChange}
+        />
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="text-xs px-3 py-1 rounded-full transition-all"
+          style={{
+            background: "var(--bg-elevated)",
+            border: "1px solid var(--border-subtle)",
+            color: "var(--text-muted)",
+          }}
+        >
+          {uploading ? "上传中..." : "上传图片"}
+        </button>
+      </>
+    );
+  }
 
   return (
     <div
