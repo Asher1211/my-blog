@@ -236,10 +236,6 @@ export default function MarkdownEditor({
             <div className="mt-2">
               <ImageUploader onUploaded={(url) => setCoverImage(url)} />
             </div>
-            <label style={labelStyle} className="mt-3 block">正文插图</label>
-            <div className="mb-2">
-              <ImageUploader onUploaded={(url) => setContent(content + `\n![](${url})\n`)} />
-            </div>
           </div>
           <div className="sm:col-span-2">
             <label style={labelStyle}>摘要</label>
@@ -284,6 +280,7 @@ export default function MarkdownEditor({
             >
               导入 .md 文件
             </button>
+            <ImageUploader onUploaded={(url) => setContent(content + `\n![](${url})\n`)} />
           </div>
           <MDEditor
             value={content}
