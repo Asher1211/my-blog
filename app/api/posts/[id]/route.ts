@@ -88,7 +88,7 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const authError = await requireAdmin(req);
+  const authError = await requireAdmin(_req);
   if (authError) return authError;
 
   const existing = await prisma.post.findUnique({
